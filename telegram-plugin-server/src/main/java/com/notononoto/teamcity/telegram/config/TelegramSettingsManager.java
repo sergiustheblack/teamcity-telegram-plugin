@@ -36,6 +36,7 @@ public class TelegramSettingsManager implements ChangeListener {
   private static final String PROXY_PORT_ATTR = "proxy-port";
   private static final String PROXY_USERNAME_ATTR = "proxy-username";
   private static final String PROXY_PASSWORD_ATTR = "proxy-password";
+  private static final String PARSE_MODE_ATTR = "parse-mode";
 
   private static final String CONFIG_FILE_NAME = "telegram-config.xml";
 
@@ -101,6 +102,7 @@ public class TelegramSettingsManager implements ChangeListener {
           root.setAttribute(PROXY_PORT_ATTR, storeInteger(newSettings.getProxyPort()));
           root.setAttribute(PROXY_USERNAME_ATTR, newSettings.getProxyUsername());
           root.setAttribute(PROXY_PASSWORD_ATTR, scramble(newSettings.getProxyPassword()));
+          root.setAttribute(PARSE_MODE_ATTR, newSettings.getParseMode() == null ? null : newSettings.getParseMode().getName());
         }));
     settings = newSettings;
     botManager.reloadIfNeeded(settings);
@@ -120,6 +122,8 @@ public class TelegramSettingsManager implements ChangeListener {
     newSettings.setProxyPort(restoreInteger(root.getAttributeValue(PROXY_PORT_ATTR)));
     newSettings.setProxyUsername(root.getAttributeValue(PROXY_PASSWORD_ATTR));
     newSettings.setProxyPassword(unscramble(root.getAttributeValue(PROXY_PASSWORD_ATTR)));
+    String parseModeName = root.getAttributeValue(PARSE_MODE_ATTR);
+    TelegramParseMode.fromName(parseModeName).ifPresent(newSettings::setParseMode);
 
     settings = newSettings;
     botManager.reloadIfNeeded(settings);

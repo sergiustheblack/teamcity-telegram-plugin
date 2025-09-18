@@ -1,5 +1,6 @@
 package com.notononoto.teamcity.telegram.web;
 
+import com.notononoto.teamcity.telegram.config.TelegramParseMode;
 import com.notononoto.teamcity.telegram.config.TelegramSettings;
 import jetbrains.buildServer.controllers.RememberState;
 import jetbrains.buildServer.controllers.StateField;
@@ -27,6 +28,9 @@ public class TelegramSettingsBean extends RememberState {
   private String proxyUsername;
   @StateField
   private String proxyPassword;
+  /** Message parse mode */
+  @StateField
+  private String parseMode;
 
   public TelegramSettingsBean(@NotNull TelegramSettings settings) {
     this.botToken = settings.getBotToken();
@@ -37,6 +41,7 @@ public class TelegramSettingsBean extends RememberState {
         "" : Integer.toString(settings.getProxyPort());
     this.proxyUsername = settings.getProxyUsername();
     this.proxyPassword = settings.getProxyPassword();
+    this.parseMode = settings.getParseMode() == null ? null : settings.getParseMode().getName();
     rememberState();
   }
 
@@ -116,6 +121,18 @@ public class TelegramSettingsBean extends RememberState {
     this.proxyPassword = RSACipher.decryptWebRequestData(encrypted);
   }
 
+  public String getParseMode() {
+    return parseMode;
+  }
+
+  public void setParseMode(String parseMode) {
+    this.parseMode = parseMode;
+  }
+
+  public java.util.List<TelegramParseMode> getAllParseModes() {
+    return java.util.Arrays.asList(TelegramParseMode.values());
+  }
+
   public TelegramSettings toSettings() {
     TelegramSettings settings = new TelegramSettings();
     settings.setBotToken(botToken);
@@ -125,6 +142,11 @@ public class TelegramSettingsBean extends RememberState {
     settings.setProxyPort(StringUtil.isEmpty(proxyPort) ? null : Integer.valueOf(proxyPort));
     settings.setProxyUsername(proxyUsername);
     settings.setProxyPassword(proxyPassword);
+    TelegramParseMode.fromName(parseMode)
+        .ifPresent(settings::setParseMode);
+    if (settings.getParseMode() == null) {
+      settings.setParseMode(TelegramParseMode.NONE);
+    }
     return settings;
   }
 }

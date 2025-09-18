@@ -2,4 +2,4 @@
 <!DOCTYPE telegram SYSTEM "telegram-config.dtd">
 
 <telegram bot-token="" paused="false" use-proxy="false"
-          proxy-server="" proxy-port="" proxy-username="" proxy-password=""/>
+          proxy-server="" proxy-port="" proxy-username="" proxy-password="" parse-mode="None"/>

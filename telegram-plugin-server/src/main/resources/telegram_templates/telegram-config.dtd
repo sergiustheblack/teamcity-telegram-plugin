@@ -7,4 +7,5 @@
   proxy-port CDATA #REQUIRED
   proxy-username CDATA #REQUIRED
   proxy-password CDATA #REQUIRED
+  parse-mode CDATA #IMPLIED
 >

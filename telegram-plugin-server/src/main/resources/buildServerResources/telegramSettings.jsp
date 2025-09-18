@@ -50,6 +50,20 @@
                         <span class="error" id="errorBotToken"></span>
                     </td>
                 </tr>
+                <tr>
+                    <th><label for="parseMode">Message format:</label></th>
+                    <td>
+                        <select name="parseMode" id="parseMode">
+                            <c:forEach var="mode" items="${telegramSettings.allParseModes}">
+                                <option value="${mode.name}" <c:if test="${mode.name == telegramSettings.parseMode}">selected</c:if>>${mode.name}</option>
+                            </c:forEach>
+                        </select>
+                        <span class="smallNote">Select how messages are formatted: <c:forEach var="mode"
+                                                                                              items="${telegramSettings.allParseModes}"
+                                                                                              varStatus="status">${mode.name}
+                            <c:if test="${!status.last}">, </c:if></c:forEach>.</span>
+                    </td>
+                </tr>
                 <tr class="groupingTitle">
                     <td colspan="2">Proxy settings</td>
                 </tr>
