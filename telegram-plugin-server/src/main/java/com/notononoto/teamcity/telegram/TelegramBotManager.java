@@ -130,12 +130,23 @@ public class TelegramBotManager {
         if (message == null) {
           continue;
         }
-        Long chatId = message.chat().id();
-        SendMessage msg = buildMsg(chatId,
-            "Hello! Your chat id is '" + chatId + "'.\n" +
-                "If you want to receive notifications about Teamcity events " +
-                "please add this chat id in your Teamcity settings");
-        bot.execute(msg);
+        
+        // Check if this is a /start command
+        boolean shouldSendWelcomeMessage = false;
+        
+        // Check for /start command
+        if (message.text() != null && message.text().equals("/start")) {
+          shouldSendWelcomeMessage = true;
+        }
+        
+        if (shouldSendWelcomeMessage) {
+          Long chatId = message.chat().id();
+          SendMessage msg = buildMsg(chatId,
+              "Hello! Your chat id is '" + chatId + "'.\n" +
+                  "If you want to receive notifications about Teamcity events " +
+                  "please add this chat id in your Teamcity settings");
+          bot.execute(msg);
+        }
       }
       return UpdatesListener.CONFIRMED_UPDATES_ALL;
     });
